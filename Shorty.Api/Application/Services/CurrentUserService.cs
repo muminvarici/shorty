@@ -20,6 +20,8 @@ public class CurrentUserService
             return ipAddress;
         }
 
-        return context.User.Identity?.Name ?? "system";
+        return context.User.Identity?.Name
+               ?? context.Connection.RemoteIpAddress?.ToString()
+               ?? "system";
     }
 }

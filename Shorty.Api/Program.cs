@@ -33,7 +33,7 @@ app.UseHttpsRedirection();
 app.MapGet("/api/v1/url/{code}", async (UrlService urlService, [FromRoute] string code) =>
     {
         var longUrl = await urlService.GenerateLongUrl(code);
-        if (longUrl == null) return Results.NotFound("Url not found!");
+        if (longUrl == null) return Results.NotFound("Url not found or expired!");
         return Results.Redirect(longUrl);
     })
     .WithDescription("Go to short URL")

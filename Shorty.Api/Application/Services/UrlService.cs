@@ -37,7 +37,7 @@ public class UrlService
         var code = new string(chars);
         var shortUrl = $"{_httpContextAccessor.HttpContext!.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/api/v1/url/{code}";
         var validUntil = request.LastUsageDate ?? DateTime.Now.AddYears(10);
-        var entity = new UrlDetail(request.Url, shortUrl, code, validUntil, DateTime.UtcNow, _currentUserService.GetUserIdentity(), request.IsSingleUsage);
+        var entity = new UrlDetail(request.Url, shortUrl, code, validUntil, DateTime.UtcNow, _currentUserService.GetUserIdentity(), request.IsSingleUsage, true);
         _dbContext.UrlDetails.Add(entity);
         await _dbContext.SaveChangesAsync();
 
@@ -46,10 +46,21 @@ public class UrlService
 
     public async Task<string?> GenerateLongUrl(string code)
     {
-        var urlDetail = await _dbContext.UrlDetails.SingleOrDefaultAsync(w => w.Code == code);
-        if (urlDetail?.IsSingleUsage != true) return urlDetail?.LongUrl;
+        var urlDetail = await _dbContext.UrlDetails.SingleOrDefaultAsync(w => w.Code == code.ToLower() && w.IsActive);
+        if (urlDetail == null) return null;
 
-        _dbContext.Remove(urlDetail);
+        if (urlDetail.IsSingleUsage == true)
+        {
+            urlDetail.IsActive = false;
+        }
+
+        _dbContext.UrlUsageHistories.Add(new UrlUsageHistory
+        {
+            UrlId = urlDetail.Id,
+            CreatedAt = DateTime.UtcNow,
+            CreatedBy = _currentUserService.GetUserIdentity()
+        });
+
         await _dbContext.SaveChangesAsync();
 
         return urlDetail.LongUrl;

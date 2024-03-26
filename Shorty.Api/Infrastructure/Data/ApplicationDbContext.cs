@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Shorty.Api.Domain.Constants;
 using Shorty.Api.Domain.Entities;
+using Shorty.Api.Infrastructure.Data.Configurations;
 
 namespace Shorty.Api.Infrastructure.Data;
 
 public class ApplicationDbContext : DbContext
 {
     public DbSet<UrlDetail> UrlDetails { get; set; }
+    public DbSet<UrlUsageHistory> UrlUsageHistories { get; set; }
 
     public ApplicationDbContext(DbContextOptions options) : base(options)
     {
@@ -14,24 +15,8 @@ public class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<UrlDetail>((builder) =>
-        {
-            builder.HasKey(w => w.Id);
-            builder.Property(w => w.LongUrl)
-                .HasMaxLength(UrlConstants.MaxUrlLength)
-                .IsRequired();
-
-            builder.Property(w => w.ShortUrl)
-                .HasMaxLength(UrlConstants.MaxUrlLength)
-                .IsRequired();
-
-            builder.Property(w => w.Code)
-                .HasMaxLength(UrlConstants.MaxCodeLength)
-                .IsRequired();
-
-            builder.HasIndex(w => w.Code)
-                .IsUnique();
-        });
+        modelBuilder.ApplyConfiguration(new UrlDetailConfiguration());
+        modelBuilder.ApplyConfiguration(new UrlUsageHistoryConfiguration());
         
         base.OnModelCreating(modelBuilder);
     }
