@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shorty.Api.Application.Services;
@@ -21,14 +22,20 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => { options.UseSqli
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
+
+
+// Configure the HTTP request pipeline.
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
+
+app.MapGet("/", () => Results.Redirect("/swagger"))
+    .ExcludeFromDescription();
 
 app.MapGet("/api/v1/url/{code}", async (UrlService urlService, [FromRoute] string code) =>
     {
