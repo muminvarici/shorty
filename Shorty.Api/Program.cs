@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Shorty.Api.Data;
-using Shorty.Api.Requests;
-using Shorty.Api.Responses;
-using Shorty.Api.Services;
+using Shorty.Api.Application.Services;
+using Shorty.Api.Infrastructure.Data;
+using Shorty.Api.Presentation.Contracts.Requests;
+using Shorty.Api.Presentation.Contracts.Responses;
 
 var builder = WebApplication.CreateBuilder(args);
 

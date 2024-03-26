@@ -4,11 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Shorty.Api.Data;
+using Shorty.Api.Infrastructure.Data;
+using Shorty.Api.Infrastructure.Data;
 
 #nullable disable
 
-namespace Shorty.Api.Data.Migrations
+namespace Shorty.Api.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20240326084634_InitialMigration")]

@@ -3,11 +3,11 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Shorty.Api.Data;
+using Shorty.Api.Infrastructure.Data;
 
 #nullable disable
 
-namespace Shorty.Api.Data.Migrations
+namespace Shorty.Api.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot

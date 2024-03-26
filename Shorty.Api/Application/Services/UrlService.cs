@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Shorty.Api.Constants;
-using Shorty.Api.Data;
-using Shorty.Api.Entities;
-using Shorty.Api.Requests;
-using Shorty.Api.Responses;
+using Shorty.Api.Domain.Constants;
+using Shorty.Api.Domain.Entities;
+using Shorty.Api.Infrastructure.Data;
+using Shorty.Api.Presentation.Contracts.Requests;
+using Shorty.Api.Presentation.Contracts.Responses;
 
-namespace Shorty.Api.Services;
+namespace Shorty.Api.Application.Services;
 
 public class UrlService
 {

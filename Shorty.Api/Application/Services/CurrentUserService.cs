@@ -1,4 +1,4 @@
-﻿namespace Shorty.Api.Services;
+﻿namespace Shorty.Api.Application.Services;
 
 public class CurrentUserService
 {

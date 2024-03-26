@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using Shorty.Api.Constants;
+using Shorty.Api.Domain.Constants;
 
-namespace Shorty.Api.Requests;
+namespace Shorty.Api.Presentation.Contracts.Requests;
 
 public record ShortUrlRequest
 {

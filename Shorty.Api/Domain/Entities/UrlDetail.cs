@@ -1,4 +1,4 @@
-﻿namespace Shorty.Api.Entities;
+﻿namespace Shorty.Api.Domain.Entities;
 
 public class UrlDetail
 {

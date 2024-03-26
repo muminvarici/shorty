@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Shorty.Api.Data.Migrations
+namespace Shorty.Api.Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
     public partial class InitialMigration : Migration

@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Shorty.Api.Entities;
+using Shorty.Api.Domain.Constants;
+using Shorty.Api.Domain.Entities;
 
-namespace Shorty.Api.Data;
+namespace Shorty.Api.Infrastructure.Data;
 
 public class ApplicationDbContext : DbContext
 {
@@ -17,15 +18,15 @@ public class ApplicationDbContext : DbContext
         {
             builder.HasKey(w => w.Id);
             builder.Property(w => w.LongUrl)
-                .HasMaxLength(Constants.UrlConstants.MaxUrlLength)
+                .HasMaxLength(UrlConstants.MaxUrlLength)
                 .IsRequired();
 
             builder.Property(w => w.ShortUrl)
-                .HasMaxLength(Constants.UrlConstants.MaxUrlLength)
+                .HasMaxLength(UrlConstants.MaxUrlLength)
                 .IsRequired();
 
             builder.Property(w => w.Code)
-                .HasMaxLength(Constants.UrlConstants.MaxCodeLength)
+                .HasMaxLength(UrlConstants.MaxCodeLength)
                 .IsRequired();
 
             builder.HasIndex(w => w.Code)
