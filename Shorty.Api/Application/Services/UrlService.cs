@@ -47,7 +47,12 @@ public class UrlService
     public async Task<string?> GenerateLongUrl(string code)
     {
         var urlDetail = await _dbContext.UrlDetails.SingleOrDefaultAsync(w => w.Code == code);
-        return urlDetail?.LongUrl;
+        if (urlDetail?.IsSingleUsage != true) return urlDetail?.LongUrl;
+
+        _dbContext.Remove(urlDetail);
+        await _dbContext.SaveChangesAsync();
+
+        return urlDetail.LongUrl;
     }
 
 
@@ -64,7 +69,7 @@ public class UrlService
 
         if (!request.Url.StartsWith("http://") && !request.Url.StartsWith("https://"))
             request.Url = $"https://{request.Url}";
-        
+
         if (!Uri.TryCreate(request.Url, UriKind.RelativeOrAbsolute, out _))
             return false;
 

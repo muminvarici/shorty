@@ -55,3 +55,8 @@ app.MapPost("/api/v1/url",
     .WithOpenApi();
 
 app.Run();
+
+/// <summary>
+/// For testing only
+/// </summary>
+public sealed partial class Program;
