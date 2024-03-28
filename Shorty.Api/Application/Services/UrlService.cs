@@ -12,13 +12,21 @@ public class UrlService
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly CurrentUserService _currentUserService;
     private readonly ApplicationDbContext _dbContext;
+    private readonly ILogger<UrlService> _logger;
     private readonly Random _random = new();
 
-    public UrlService(IHttpContextAccessor httpContextAccessor, CurrentUserService currentUserService, ApplicationDbContext dbContext)
+    public UrlService
+    (
+        IHttpContextAccessor httpContextAccessor,
+        CurrentUserService currentUserService,
+        ApplicationDbContext dbContext,
+        ILogger<UrlService> logger
+    )
     {
         _httpContextAccessor = httpContextAccessor;
         _currentUserService = currentUserService;
         _dbContext = dbContext;
+        _logger = logger;
     }
 
     public async Task<ShortUrlResponse?> GenerateShortUrl(ShortUrlRequest request)
@@ -38,14 +46,25 @@ public class UrlService
         var shortUrl = $"{_httpContextAccessor.HttpContext!.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/api/v1/url/{code}";
         var validUntil = request.LastUsageDate ?? DateTime.Now.AddYears(10);
         var entity = new UrlDetail(request.Url, shortUrl, code, validUntil, DateTime.UtcNow, _currentUserService.GetUserIdentity(), request.IsSingleUsage, true);
-        _dbContext.UrlDetails.Add(entity);
-        await _dbContext.SaveChangesAsync();
+        try
+        {
+            _dbContext.UrlDetails.Add(entity);
+            await _dbContext.SaveChangesAsync();
 
-        return new ShortUrlResponse(entity.LongUrl, entity.ShortUrl, entity.ValidUntil, entity.IsSingleUsage ?? false);
+            var response = new ShortUrlResponse(entity.LongUrl, entity.ShortUrl, entity.ValidUntil, entity.IsSingleUsage ?? false);
+            _logger.LogInformation("Generated response @{response}", response);
+            return response;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     public async Task<string?> GenerateLongUrl(string code)
     {
+        _logger.LogInformation("Checking code {code} by {user}", code, _currentUserService.GetUserIdentity());
         var urlDetail = await _dbContext.UrlDetails.SingleOrDefaultAsync(w => w.Code == code.ToLower() && w.IsActive);
         if (urlDetail == null) return null;
 
@@ -69,6 +88,7 @@ public class UrlService
 
     private bool ValidateRequest(ShortUrlRequest request)
     {
+        _logger.LogInformation("Validating @{data}", request);
         if (string.IsNullOrWhiteSpace(request.Url))
             return false;
         if (request.Url.Length > UrlConstants.MaxUrlLength)

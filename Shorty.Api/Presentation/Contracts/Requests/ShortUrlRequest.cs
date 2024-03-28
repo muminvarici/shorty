@@ -9,7 +9,7 @@ public record ShortUrlRequest
     [Required]
     [Description("REQUIRED: Url that you want the short version")]
     [DefaultValue("example.com")]
-    public string Url { get; set; }
+    public string Url { get; set; } = string.Empty;
 
     [Range(UrlConstants.MinCodeLength, UrlConstants.MaxCodeLength)]
     [Description("OPTIONAL: Use this parameter if you want a specific code length. Default value is '7'")]

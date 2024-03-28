@@ -1,9 +1,7 @@
 ﻿using System.Net;
-using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
-using Microsoft.AspNetCore.Http.Headers;
 using Shorty.Api.Presentation.Contracts.Requests;
 using Shorty.Api.Presentation.Contracts.Responses;
 
